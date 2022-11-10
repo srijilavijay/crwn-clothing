@@ -7,7 +7,6 @@ import Button from "../button/button.component";
 import {
   SignInWithGooglePopup,
   signInAuthUserWithEmailAndPassword,
-  createUserDocumentFromAuth,
 } from "../../utils/firebase/firebase.utils";
 
 import "./sign-in-form.styles.scss";
@@ -26,30 +25,31 @@ const SignInForm = () => {
   };
 
   const signInWithGoogle = async () => {
-    const { user } = await SignInWithGooglePopup();
-    await createUserDocumentFromAuth(user);
+    await SignInWithGooglePopup();
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-        const response = await signInAuthUserWithEmailAndPassword(email, password);
-        console.log(response);
-        resetFormFields();
-        } catch (error) {
-            switch(error.code) {
-              case 'auth/wrong-password' :
-                alert('incorrect password for email');
-                break;
-              case 'auth/user-not-found' :
-                alert('no user associated with this email');
-                break;
-              default:
-                console.log(error);        
-            }         
-         }
-    
+      const { user } = await signInAuthUserWithEmailAndPassword(
+        email,
+        password
+      );
+
+      resetFormFields();
+    } catch (error) {
+      switch (error.code) {
+        case "auth/wrong-password":
+          alert("incorrect password for email");
+          break;
+        case "auth/user-not-found":
+          alert("no user associated with this email");
+          break;
+        default:
+          console.log(error);
+      }
+    }
   };
 
   const handleChange = (event) => {
@@ -81,10 +81,10 @@ const SignInForm = () => {
         />
         <div className="buttons-container">
           <Button type="submit">Sign In</Button>
-          <Button type="button" buttonType="google" onClick={signInWithGoogle}>Google Sign In</Button>
+          <Button type="button" buttonType="google" onClick={signInWithGoogle}>
+            Google Sign In
+          </Button>
         </div>
-        
-
       </form>
     </div>
   );
